@@ -9,3 +9,6 @@ public class UserServiceApplication {
         SpringApplication.run(UserServiceApplication.class);
     }
 }
+
+/* SQLException not connecting even with correct creds.
+https://stackoverflow.com/questions/62096031/java-sql-sqlexception-access-denied-for-user-localhost-using-password-no*/

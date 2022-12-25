@@ -8,6 +8,7 @@
 		<module>wallet-service</module>
 		<module>transaction-service</module>
 		<module>notification-service</module>
+		<module>utils</module>
 	</modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
@@ -49,6 +50,17 @@
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
 			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 
