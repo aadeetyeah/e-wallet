@@ -16,19 +16,19 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int                 id;
 
     @Column(nullable = false,unique = true)
-    private String transactionId;
+    private String              transactionId;
 
     @Enumerated(value = EnumType.STRING)
-    private TransactionStatus transactionStatus;
-    private String purpose;
+    private TransactionStatus   transactionStatus;
+    private String              purpose;
 
-    private Double amount;
+    private Double              amount;
 
     @CreationTimestamp
-    private Date transactionDate;
-    private String sender;
-    private String receiver;
+    private Date                transactionDate;
+    private String              sender;
+    private String              receiver;
 }

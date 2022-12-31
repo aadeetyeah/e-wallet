@@ -22,7 +22,7 @@ public class TransactionController {
         if(!transactionRequest.validate()){
             throw new RuntimeException("Request is not valid");
         }
-        transactionService.doTransaction(transactionRequest);
-        return null;
+        String TransactionId    =   transactionService.doTransaction(transactionRequest);
+        return TransactionId;
     }
 }
