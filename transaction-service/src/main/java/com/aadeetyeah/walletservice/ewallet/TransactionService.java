@@ -61,23 +61,6 @@ public class TransactionService {
         String receiver           =    (String) walletUpdate.get(CommonConstants.RECEIVER_ATTRIBUTE);
         Double amount             =    (Double) walletUpdate.get(AMOUNT_ATTRIBUTE);
 
-        JSONObject receiverNotification     =   null;
-
-        if(WALLET_UPDATE_SUCCESS_STATUS.equals(trxStatus)){
-            transactionRepository.updateTrx(trxId,TransactionStatus.SUCCESS);
-            receiverNotification    =   new JSONObject();
-            receiverNotification.put(EMAIL_ATTRIBUTE,receiver);
-            receiverNotification.put(AMOUNT_ATTRIBUTE,amount);
-            receiverNotification.put("isSender",false);
-            receiverNotification.put(TRANSACTION_ID_ATTRIBUTE,trxId);
-            receiverNotification.put(TRANSACTION_STATUS_ATTRIBUTE,TransactionStatus.SUCCESS.name());
-        }else{
-            transactionRepository.updateTrx(trxId,TransactionStatus.FAILED);
-
-        }
-
-        //Failed TRX notify to sender
-        //Success TRX notify to sender and receiver
 
         //Send Notification to users of credit and debit
         JSONObject senderNotification   =   new JSONObject();
@@ -87,10 +70,30 @@ public class TransactionService {
         senderNotification.put(TRANSACTION_ID_ATTRIBUTE,trxId);
         senderNotification.put(TRANSACTION_STATUS_ATTRIBUTE,TransactionStatus.SUCCESS.name());
 
+        if(WALLET_UPDATE_SUCCESS_STATUS.equals(trxStatus)){
+
+            transactionRepository.updateTrx(trxId,TransactionStatus.SUCCESS);
+
+            JSONObject receiverNotification    =   new JSONObject();
+            receiverNotification.put(EMAIL_ATTRIBUTE,receiver);
+            receiverNotification.put(AMOUNT_ATTRIBUTE,amount);
+            receiverNotification.put("isSender",false);
+            receiverNotification.put(TRANSACTION_ID_ATTRIBUTE,trxId);
+            receiverNotification.put(TRANSACTION_STATUS_ATTRIBUTE,TransactionStatus.SUCCESS.name());
+
+            //notify receiver
+            kafkaTemplate.send(TRANSACTION_COMPLETE_TOPIC,receiverNotification.toString());
+
+        }else{
+
+            transactionRepository.updateTrx(trxId,TransactionStatus.FAILED);
+            senderNotification.put(TRANSACTION_STATUS_ATTRIBUTE,TransactionStatus.FAILED.name());
+        }
+
+        //Failed TRX notify to sender
+        //Success TRX notify to sender and receiver
+
         //notify sender
         kafkaTemplate.send(TRANSACTION_COMPLETE_TOPIC,senderNotification.toString());
-
-        //notify receiver
-        kafkaTemplate.send(TRANSACTION_COMPLETE_TOPIC,receiverNotification.toString());
     }
 }

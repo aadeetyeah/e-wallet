@@ -27,5 +27,4 @@ public class Wallet {
 
     @CreationTimestamp
     private Date createdOn;
-
 }

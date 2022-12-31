@@ -23,12 +23,14 @@ public class Transaction {
 
     @Enumerated(value = EnumType.STRING)
     private TransactionStatus   transactionStatus;
+
     private String              purpose;
 
     private Double              amount;
 
     @CreationTimestamp
     private Date                transactionDate;
+
     private String              sender;
     private String              receiver;
 }

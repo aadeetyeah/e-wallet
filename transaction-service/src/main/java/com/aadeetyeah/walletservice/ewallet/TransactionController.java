@@ -16,13 +16,12 @@ public class TransactionController {
     public String doTransaction(@RequestBody TransactionRequest transactionRequest){
         //Sender
         //Receiver
-        //text msg
+        //text msg(Purpose)
         //amount
 
         if(!transactionRequest.validate()){
             throw new RuntimeException("Request is not valid");
         }
-        String TransactionId    =   transactionService.doTransaction(transactionRequest);
-        return TransactionId;
+        return   transactionService.doTransaction(transactionRequest);
     }
 }

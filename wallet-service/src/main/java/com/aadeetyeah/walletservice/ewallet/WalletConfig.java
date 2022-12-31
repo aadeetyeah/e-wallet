@@ -14,7 +14,7 @@ import java.util.Properties;
 public class WalletConfig {
 
     Properties getKafkaProps(){
-        Properties properties=new Properties();
+        Properties properties       =   new Properties();
 
         //Producer Properties
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
@@ -43,8 +43,11 @@ public class WalletConfig {
 
     @Bean
     ConcurrentKafkaListenerContainerFactory<String,String> getConcurrentKafkaListenerFactory(){
-        ConcurrentKafkaListenerContainerFactory concurrentKafkaListenerContainerFactory=new ConcurrentKafkaListenerContainerFactory();
+        ConcurrentKafkaListenerContainerFactory concurrentKafkaListenerContainerFactory     =
+                    new ConcurrentKafkaListenerContainerFactory();
+
         concurrentKafkaListenerContainerFactory.setConsumerFactory(getConsumerFactory());
+
         return concurrentKafkaListenerContainerFactory;
     }
 }
