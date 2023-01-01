@@ -48,7 +48,7 @@ public class WalletService {
     }
 
     @KafkaListener(topics = {CommonConstants.TRANSACTION_CREATE_TOPIC},groupId="ewallet_grp")
-    public void updateWallet(String msg){
+    public void updateWallet(String msg) throws Exception {
         JSONParser jsonParser           =    new JSONParser();
         JSONObject updateWalletRequest  =    null;
 
@@ -72,11 +72,15 @@ public class WalletService {
         trxStatusObj.put(CommonConstants.RECEIVER_ATTRIBUTE,receiver);
         trxStatusObj.put(CommonConstants.AMOUNT_ATTRIBUTE,amount);
 
-        if(senderWallet !=  null    &&     senderWallet.getBalance()-amount    >=  0){
-            walletRepository.updateWallet(receiver,amount);
-            walletRepository.updateWallet(sender,0-amount);
-            trxStatusObj.put(CommonConstants.WALLET_UPDATE_STATUS_ATTRIBUTE,CommonConstants.WALLET_UPDATE_SUCCESS_STATUS);
+        if(senderWallet == null){
+            throw new Exception("Sender Wallet not present.");
         }
+        if(senderWallet.getBalance()-amount    <  0){
+            throw new Exception("Not enough Balance, Please add money to wallet.");
+        }
+        walletRepository.updateWallet(receiver,amount);
+        walletRepository.updateWallet(sender,0-amount);
+        trxStatusObj.put(CommonConstants.WALLET_UPDATE_STATUS_ATTRIBUTE,CommonConstants.WALLET_UPDATE_SUCCESS_STATUS);
 
         kafkaTemplate.send(CommonConstants.WALLET_UPDATE_TOPIC,trxStatusObj.toString());
     }
